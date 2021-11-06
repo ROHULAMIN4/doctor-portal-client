@@ -14,7 +14,7 @@ import useAuth from "../../../Hooks/useAuth";
 import login from "../../../images/login.png";
 const Login = () => {
   const [loginData, setLoginData] = useState({});
-  const { loginUser, isLoading, user, authError } = useAuth();
+  const { loginUser, isLoading, user, authError, singInGoogle } = useAuth();
   // auth redirect ar jonno history and location use korte hoy and use firea base a jeikha a loginuser ase seikhan  change korte hoy
   const location = useLocation();
   const history = useHistory();
@@ -32,6 +32,9 @@ const Login = () => {
     loginUser(loginData.email, loginData.password, location, history);
     // console.log(loginData);
     e.preventDefault();
+  };
+  const handleGoogleSingIn = () => {
+    singInGoogle(location, history);
   };
   return (
     <Container>
@@ -51,7 +54,7 @@ const Login = () => {
               id="standard-basic"
               label="Your Email"
               name="email"
-              onChange={hanleOnChaenge}
+              onBlur={hanleOnChaenge}
               variant="standard"
             />
             <TextField
@@ -60,7 +63,7 @@ const Login = () => {
               label="Your Password"
               variant="standard"
               name="password"
-              onChange={hanleOnChaenge}
+              onBlur={hanleOnChaenge}
               type="password"
             />
             <Button
@@ -83,6 +86,16 @@ const Login = () => {
                 <strong>{user.email}</strong>
               </Alert>
             )}
+            <p></p>
+            ---------------------------
+            <Button
+              onClick={handleGoogleSingIn}
+              type="submit"
+              sx={{ width: "75%", mt: 2 }}
+              variant="contained"
+            >
+              Google Sign in
+            </Button>
           </form>
         </Grid>
         <Grid item xs={12} md={6}>

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { NearMeOutlined } from "@mui/icons-material";
 import Button from "@mui/material/Button";
+import useAuth from "../../Hooks/useAuth";
 
 const style = {
   position: "absolute",
@@ -20,6 +21,7 @@ const style = {
 };
 
 const BookingModal = ({ openBooking, BookingClose, booking, date }) => {
+  const { user } = useAuth();
   const { name, time } = booking;
   const handleSubmit = (e) => {
     alert("submitting");
@@ -30,6 +32,7 @@ const BookingModal = ({ openBooking, BookingClose, booking, date }) => {
     BookingClose();
     e.preventDefault();
   };
+
   return (
     <div>
       <Modal
@@ -54,7 +57,7 @@ const BookingModal = ({ openBooking, BookingClose, booking, date }) => {
             <TextField
               sx={{ m: 2, width: "90%" }}
               id="outlined-size-big"
-              defaultValue="Your Name"
+              defaultValue={user.displayName}
               size="Your Name"
             />
             <TextField
@@ -66,7 +69,7 @@ const BookingModal = ({ openBooking, BookingClose, booking, date }) => {
             <TextField
               sx={{ m: 2, width: "90%" }}
               id="outlined-size-small"
-              defaultValue="Email"
+              defaultValue={user.email}
               size="Email"
             />
             <TextField

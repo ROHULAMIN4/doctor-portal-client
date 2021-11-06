@@ -4,6 +4,9 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateProfile,
   onAuthStateChanged,
 } from "firebase/auth";
 
@@ -16,12 +19,27 @@ const useFirebase = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState("");
   const auth = getAuth();
-  const SignInUsingPassord = (email, password) => {
+  const Googleprovider = new GoogleAuthProvider();
+
+  const SignInUsingPassord = (email, password, name, history) => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        // for name property save in firebase
+        const newUser = { email, displayName: name };
+        setUser(newUser);
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        })
+          .then(() => {})
+          .catch((error) => {});
+
+        // end save fireabase name property
+
         // const user = userCredential.user;
         setAuthError("");
+        // redirec for  creat new regiter
+        history.replace("/");
       })
       .catch((error) => {
         setAuthError(error.message);
@@ -57,6 +75,24 @@ const useFirebase = () => {
       })
       .finally(() => setIsLoading(false));
   };
+  // sing in google
+  const singInGoogle = (location, history) => {
+    signInWithPopup(auth, Googleprovider)
+      .then((result) => {
+        setIsLoading(true);
+        setAuthError("");
+        // history.replace("/");
+        const destionation = location?.state?.from || "/";
+        history.replace(destionation);
+        const user = result.user;
+        setUser(user);
+        // ...
+      })
+      .catch((error) => {
+        setAuthError(error.message);
+      })
+      .finally(() => setIsLoading(false));
+  };
   //   observed the state change
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -77,6 +113,7 @@ const useFirebase = () => {
     SignInUsingPassord,
     loginUser,
     logOut,
+    singInGoogle,
     authError,
   };
 };
