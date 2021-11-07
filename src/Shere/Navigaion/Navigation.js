@@ -28,13 +28,21 @@ const Navigation = () => {
           </Typography>
           <Link to="/appoinmenthome">Appinment</Link>
           {user.email ? (
-            <Button
-              style={{ textDecoration: "none", color: "white" }}
-              onClick={logOut}
-              color="inherit"
-            >
-              logOut
-            </Button>
+            <Box>
+              <Link
+                style={{ textDecoration: "none", color: "white" }}
+                to="/dahsbord"
+              >
+                <Button color="inherit">Dashbord</Button>
+              </Link>
+              <Button
+                style={{ textDecoration: "none", color: "white" }}
+                onClick={logOut}
+                color="inherit"
+              >
+                logOut
+              </Button>
+            </Box>
           ) : (
             <Link
               style={{ textDecoration: "none", color: "white" }}

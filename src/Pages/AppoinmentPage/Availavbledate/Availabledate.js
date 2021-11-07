@@ -1,5 +1,5 @@
-import { Container, Grid } from "@mui/material";
-import React from "react";
+import { Alert, AlertTitle, Container, Grid } from "@mui/material";
+import React, { useState } from "react";
 import BookingModal from "../../BookingModal/BookingModal";
 import Bokking from "../Booking/Bokking";
 const bookings = [
@@ -41,15 +41,26 @@ const bookings = [
   },
 ];
 const Availabledate = ({ date }) => {
+  const [successBooking, setSuccessBooking] = useState(false);
   return (
     <Container style={{ marginTop: "40px", marginBottom: "40px" }}>
       <h3 style={{ color: "gray" }}>
         AVAILABLE DATE
         <span style={{ color: "#1AA2E3" }}>{date.toDateString()}</span>
       </h3>
+      {successBooking && (
+        <Alert style={{ marginTop: "20px" }} severity="success">
+          <AlertTitle>Booking Successfull </AlertTitle>
+        </Alert>
+      )}
       <Grid container spacing={2}>
         {bookings.map((book) => (
-          <Bokking booking={book} book={book.id} dateId={date}></Bokking>
+          <Bokking
+            booking={book}
+            book={book.id}
+            dateId={date}
+            setSuccessBooking={setSuccessBooking}
+          ></Bokking>
         ))}
       </Grid>
     </Container>

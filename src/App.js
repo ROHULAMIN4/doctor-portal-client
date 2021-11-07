@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import "./App.css";
 import AuthProvider from "./Context/Authprovider/AuthProvider";
+import Dasbord from "./DashBord/Dashbord/Dashbord";
 import AppoinmentHome from "./Pages/AppoinmentPage/AppoinmentHome/AppoinmentHome";
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login/Login";
@@ -19,6 +20,9 @@ function App() {
             </Route>
             <PrivateRoute path="/appoinmenthome">
               <AppoinmentHome></AppoinmentHome>
+            </PrivateRoute>
+            <PrivateRoute path="/dahsbord">
+              <Dasbord></Dasbord>
             </PrivateRoute>
             {/* <Route path="/appoinmenthome">
               <AppoinmentHome></AppoinmentHome>
