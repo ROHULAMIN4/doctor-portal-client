@@ -1,6 +1,5 @@
 import { Alert, AlertTitle, Container, Grid } from "@mui/material";
 import React, { useState } from "react";
-import BookingModal from "../../BookingModal/BookingModal";
 import Bokking from "../Booking/Bokking";
 const bookings = [
   {

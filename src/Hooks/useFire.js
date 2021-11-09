@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
+  getIdToken,
   onAuthStateChanged,
 } from "firebase/auth";
 
@@ -18,6 +19,8 @@ const useFirebase = () => {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState("");
+  const [token, setToken] = useState("");
+  const [admin, setAdmin] = useState(false);
   const auth = getAuth();
   const Googleprovider = new GoogleAuthProvider();
 
@@ -28,6 +31,7 @@ const useFirebase = () => {
         // for name property save in firebase
         const newUser = { email, displayName: name };
         setUser(newUser);
+        saveUser(email, name, "POST");
         updateProfile(auth.currentUser, {
           displayName: name,
         })
@@ -62,6 +66,8 @@ const useFirebase = () => {
     setAuthError("");
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        // securely post api
+
         // Signed in
         setAuthError("");
 
@@ -80,11 +86,14 @@ const useFirebase = () => {
     signInWithPopup(auth, Googleprovider)
       .then((result) => {
         setIsLoading(true);
+
         setAuthError("");
         // history.replace("/");
         const destionation = location?.state?.from || "/";
         history.replace(destionation);
         const user = result.user;
+        // google sign in secure joto bar loginkorok akbar e database a set hbe
+        saveUser(user.email, user.displayName, "PUT");
         setUser(user);
         // ...
       })
@@ -98,6 +107,9 @@ const useFirebase = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        getIdToken(user).then((idToken) => {
+          setToken(idToken);
+        });
         // ...
       } else {
         setUser({});
@@ -106,12 +118,30 @@ const useFirebase = () => {
     });
     return () => unsubscribe;
   }, []);
+  const saveUser = (email, displayName, method) => {
+    const newUser = { email, displayName };
+    fetch("http://localhost:5000/users", {
+      method: method,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    }).then();
+  };
+  // secure amdin data for special email
+  useEffect(() => {
+    fetch(`http://localhost:5000/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => setAdmin(data.admin));
+  }, [user.email]);
 
   return {
     user,
     isLoading,
+    token,
     SignInUsingPassord,
     loginUser,
+    admin,
     logOut,
     singInGoogle,
     authError,

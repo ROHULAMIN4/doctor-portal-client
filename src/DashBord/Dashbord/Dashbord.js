@@ -15,17 +15,21 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
-import Calender from "../../Pages/AppoinmentPage/Calender/Calender";
-import Appoinments from "./Appoinments/Appoinments";
+import Button from "@mui/material/Button";
+import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
+import DashbordHome from "../DashbordHome/DashbordHome";
+import MakeAdmin from "./MakeAdmin/MakeAdmin";
+import AddDoctor from "../AddDoctor/AddDoctor";
+import useAuth from "../../Hooks/useAuth";
+import AdminRoute from "../../Pages/Login/Login/AdminRoute/AdminRoute";
 
 const drawerWidth = 240;
 
 function Dasbord(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [date, setDate] = React.useState(new Date());
-
+  let { path, url } = useRouteMatch();
+  const { admin } = useAuth();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -34,6 +38,37 @@ function Dasbord(props) {
     <div>
       <Toolbar />
       <Divider />
+      <Button variant="text">
+        <Link
+          style={{ textDecoration: "none", color: "black" }}
+          to="/appoinmenthome"
+        >
+          Appinment
+        </Link>
+      </Button>
+
+      <p></p>
+      <Link style={{ textDecoration: "none", color: "black" }} to={`${url}`}>
+        Dashbord
+      </Link>
+      <p></p>
+      {admin && (
+        <Box>
+          <Link
+            style={{ textDecoration: "none", color: "black" }}
+            to={`${url}/makeAdmin`}
+          >
+            Make Admin
+          </Link>
+          <p></p>
+          <Link
+            style={{ textDecoration: "none", color: "black" }}
+            to={`${url}/addDoctor`}
+          >
+            Add Doctor
+          </Link>
+        </Box>
+      )}
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem button key={text}>
@@ -124,20 +159,21 @@ function Dasbord(props) {
       >
         <Toolbar />
         {/* content dasbord here */}
-        <Typography paragraph>
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            <Grid item xs={12} md={6}>
-              <Calender date={date} setDate={setDate}></Calender>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Appoinments date={date}></Appoinments>
-            </Grid>
-          </Grid>
-        </Typography>
+        {/* <Typography paragraph> */}
+
+        <Switch>
+          <Route exact path={path}>
+            <DashbordHome></DashbordHome>
+          </Route>
+          <AdminRoute path={`${path}/makeAdmin`}>
+            <MakeAdmin></MakeAdmin>
+          </AdminRoute>
+          <AdminRoute path={`${path}/addDoctor`}>
+            <AddDoctor></AddDoctor>{" "}
+          </AdminRoute>
+        </Switch>
+
+        {/* </Typography> */}
       </Box>
     </Box>
   );

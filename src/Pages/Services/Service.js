@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 const Service = (props) => {
-  const { name, description, img } = props.service;
+  const { name, img } = props.service;
   return (
     <div className="App">
       <Grid item xs={4} sm={4} md={3}>

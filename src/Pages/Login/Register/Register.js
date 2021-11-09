@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react";
 import { Grid } from "@mui/material";
 import login from "../../../images/login.png";
-import { Link, NavLink, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 
 const Register = () => {
